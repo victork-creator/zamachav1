@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Store</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Swiper.js for swipe functionality -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom styles for the application */
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior: none; /* Prevents pull-to-refresh on mobile */
+        }
+
+        /* Swiper custom styles */
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .swiper-slide:hover {
+            transform: scale(1.05);
+        }
+        .swiper-button-next, .swiper-button-prev {
+            color: #fff;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+        }
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 24px;
+        }
+        .swiper-pagination-bullet-active {
+            background: #fff;
+        }
+
+        /* Page transition styles */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .page.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+            position: relative; /* Take up space when active */
+        }
+        
+        /* Custom radio buttons for color selection */
+        .color-radio {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #ccc;
+            transition: all 0.2s ease;
+        }
+        .color-radio:checked {
+            border: 3px solid #007aff;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white overflow-hidden h-screen">
+
+    <!-- Page 1: Brand Selection -->
+    <div id="page-brand" class="page active flex flex-col justify-center items-center h-full">
+        <h1 class="text-4xl font-bold mb-4 text-center">Select a brand</h1>
+        <div class="swiper-container w-full h-1/2">
+            <div class="swiper-wrapper">
+                <!-- Brands will be injected by JavaScript -->
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+
+    <!-- Page 2: Model Selection -->
+    <div id="page-model" class="page overflow-y-auto p-4">
+        <button id="back-to-brand" class="absolute top-4 left-4 bg-gray-700 p-2 rounded-full z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        <h2 id="model-title" class="text-3xl font-bold text-center my-6">Select a model</h2>
+        <div id="model-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
+            <!-- Models will be injected by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Page 3: User Details Form -->
+    <div id="page-form" class="page flex flex-col justify-center items-center p-6">
+        <button id="back-to-model" class="absolute top-4 left-4 bg-gray-700 p-2 rounded-full z-10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        <div class="w-full max-w-md bg-gray-800 p-8 rounded-2xl shadow-lg">
+            <h2 class="text-3xl font-bold mb-6 text-center">Delivery Details</h2>
+            <form id="order-form">
+                <div class="mb-4">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Full Name</label>
+                    <input type="text" id="name" name="name" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John Doe" required>
+                </div>
+                <div class="mb-6">
+                    <label for="address" class="block mb-2 text-sm font-medium text-gray-300">Delivery Address</label>
+                    <input type="text" id="address" name="address" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="123 Main St, Anytown, USA" required>
+                </div>
+                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-lg px-5 py-3 text-center">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Page 4: Confirmation -->
+    <div id="page-confirmation" class="page flex flex-col justify-center items-center p-6 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-green-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 class="text-4xl font-bold mb-4">Thank you for your order!</h2>
+        <p class="text-lg text-gray-300 mb-8">We will contact you shortly to confirm.</p>
+        <button id="restart-button" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-lg px-6 py-3 text-center">Order Again</button>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- DATA ---
+        const phoneData = {
+            Apple: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+                models: [
+                    { name: 'iPhone 16 Pro', img: 'https://www.istore.ua/upload/iblock/ed7/r8kzk3ptq1fp0tg3zl3w28e6evj5txqm/deserttitanium_16pro_1_is.png', colors: ['#2C2C2E', '#C0C0C0', '#F5DEB3', '#6495ED'], storage: ['256GB', '512GB', '1TB'] },
+                    { name: 'iPhone 16', img: 'https://www.istore.ua/upload/iblock/33b/7vvgbq9alimp6t93tw8587yxp8oxcc9e/black_16_3_is.png', colors: ['#000000', '#F5F5DC', '#ADD8E6', '#90EE90', '#FFB6C1'], storage: ['128GB', '256GB', '512GB'] },
+                    { name: 'iPhone 15 Pro', img: 'https://www.istore.ua/upload/iblock/399/1ozydd3rlagtwi2mllhdxxbtczqll11r/15_pro_black_titan_4_is-kopiya.png', colors: ['#8A8A8E', '#2C2C2E', '#C0C0C0', '#4A4A4A'], storage: ['128GB', '256GB', '512GB', '1TB'] },
+                    { name: 'iPhone 15', img: 'https://www.istore.ua/upload/iblock/f78/oq1kb5cy7k3m9er1v2denkijlx1pmfi3/15_yellow_4_is.png', colors: ['#7494C6', '#F5DDC5', '#F5E478', '#BDE4A8', '#E3A6B4'], storage: ['128GB', '256GB', '512GB'] },
+                    { name: 'iPhone 14 Pro', img: 'https://www.istore.ua/upload/iblock/b21/sycyt0hklr47ixe9jl0da4subbzlis99/14_pro_deep_purpl_4_is_kopiya.png', colors: ['#5f5068', '#f4f2ef', '#f0e281', '#504f4d'], storage: ['128GB', '256GB', '512GB', '1TB'] },
+                ]
+            },
+            Samsung: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg',
+                models: [
+                    { name: 'Galaxy S24 Ultra', img: 'https://images.samsung.com/is/image/samsung/p6pim/levant/2401/gallery/levant-galaxy-s24-ultra-sm-s928bztqmea-539452291?$730_584_PNG$', colors: ['#3C3D42', '#D3D3D3', '#FFFACD', '#E6E6FA'], storage: ['256GB', '512GB', '1TB'] },
+                    { name: 'Galaxy Z Fold 5', img: 'https://images.samsung.com/in/smartphones/galaxy-z-fold5/images/galaxy-z-fold5-highlights-design-m.png', colors: ['#E1E1E1', '#121212', '#A4C6D8'], storage: ['256GB', '512GB', '1TB'] },
+                    { name: 'Galaxy A55', img: 'https://images.samsung.com/levant/smartphones/galaxy-a55-5g/images/galaxy-a55-5g-highlights-design-awesome-display-mo.png', colors: ['#2E4057', '#C6B2D9', '#FFFF00', '#ADD8E6'], storage: ['128GB', '256GB'] },
+                    { name: 'Galaxy S23 FE', img: 'https://images.samsung.com/is/image/samsung/p6pim/in/2309/gallery/in-galaxy-s23-fe-s711-sm-s711blgdins-538328221?$730_584_PNG$', colors: ['#50445a', '#f3f1ed', '#dce7d7', '#3c3e42'], storage: ['128GB', '256GB'] },
+                ]
+            },
+            Xiaomi: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg',
+                models: [
+                    { name: 'Xiaomi 14 Ultra', img: 'https://i02.appmifile.com/in-mimall/product/36398433367b6058d8442f275e74c851.png', colors: ['#000000', '#FFFFFF'], storage: ['512GB'] },
+                    { name: 'Redmi Note 13 Pro+', img: 'https://i02.appmifile.com/in-mimall/product/3a2333d02a0a256973bf1f005f771746.png', colors: ['#1C1C1C', '#EAEAEA', '#B3A1C8'], storage: ['256GB', '512GB'] },
+                    { name: 'Poco F6', img: 'https://i03.appmifile.com/393_operator_in/23/05/2024/2984955b9e072124503714574972f7c0.png', colors: ['#000000', '#D4AF37'], storage: ['256GB', '512GB'] },
+                    { name: 'Xiaomi 13 Pro', img: 'https://i02.appmifile.com/in-mimall/product/5863ad922659e99a81e3a4734893700b.png', colors: ['#000000', '#FFFFFF'], storage: ['256GB'] },
+                ]
+            },
+            Google: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+                models: [
+                    { name: 'Pixel 8 Pro', img: 'https://storage.googleapis.com/gweb-uniblog-publish-prod/original_images/Pixel_8_Pro_Obsidian_1.png', colors: ['#2e3643', '#e4e2de', '#96c3e3'], storage: ['128GB', '256GB', '512GB'] },
+                    { name: 'Pixel 8a', img: 'https://lh3.googleusercontent.com/Fw57K-CcyZAN-JzR61-j5pXF0p34-4z_sCjgu7gS_3Tqg0WnZ8j7jU-f54sA9i5M_c_97p_c53Fz341iJAH5X4n2v9-U', colors: ['#2e3643', '#e4e2de', '#96c3e3', '#96f0d1'], storage: ['128GB', '256GB'] },
+                    { name: 'Pixel Fold', img: 'https://lh3.googleusercontent.com/97-j34t_5k6nXvTSE4gcr1T64w-L9-_J46PAUnKad4d_yBvhIuR22Y2A-fOa52fJ5rKaPyo0ZTr513W10iM2E7sM1K6wY3f1U-E', colors: ['#3a3b3d', '#e9e6e1'], storage: ['256GB', '512GB'] },
+                    { name: 'Pixel 7 Pro', img: 'https://www.comworld.co.za/wp-content/uploads/2022/10/Google-Pixel-7-Pro-Obsidian-Black-PNG.png', colors: ['#e4e2de', '#3a3b3d', '#9b9489'], storage: ['128GB', '256GB', '512GB'] },
+                ]
+            },
+            OnePlus: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/OnePlus_Logo.svg',
+                models: [
+                    { name: 'OnePlus 12', img: 'https://oasis.op-statics.com/content/dam/oasis/page/2023/cn/12/home/phone-green.png', colors: ['#103d2b', '#e9e4de'], storage: ['256GB', '512GB'] },
+                    { name: 'OnePlus Open', img: 'https://oasis.op-statics.com/content/dam/oasis/page/2023/global/open/specs/black.png', colors: ['#000000', '#1c5545'], storage: ['512GB'] },
+                    { name: 'OnePlus Nord 3', img: 'https://oasis.op-statics.com/content/dam/oasis/page/2023/global/nord-3-5g/specs/gray.png.thumb.webp', colors: ['#576366', '#728c81'], storage: ['128GB', '256GB'] },
+                ]
+            },
+        };
+
+        // --- ELEMENTS ---
+        const pages = document.querySelectorAll('.page');
+        const brandWrapper = document.querySelector('.swiper-wrapper');
+        const modelTitle = document.getElementById('model-title');
+        const modelGrid = document.getElementById('model-grid');
+        const orderForm = document.getElementById('order-form');
+        let currentBrand = '';
+
+        // --- FUNCTIONS ---
+        function showPage(pageId) {
+            pages.forEach(page => {
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+        }
+        
+        function populateBrands() {
+            for (const brand in phoneData) {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                slide.dataset.brand = brand;
+                slide.innerHTML = `
+                    <div class="bg-gray-800 rounded-3xl w-4/5 h-4/5 flex flex-col justify-center items-center p-4">
+                        <img src="${phoneData[brand].logo}" alt="[Logo of ${brand}]" class="h-1/2 max-h-32 filter invert">
+                        <span class="mt-4 text-2xl font-bold">${brand}</span>
+                    </div>
+                `;
+                brandWrapper.appendChild(slide);
+            }
+        }
+
+        function populateModels(brand) {
+            currentBrand = brand;
+            modelTitle.textContent = `${brand} Models`;
+            modelGrid.innerHTML = '';
+            phoneData[brand].models.forEach(model => {
+                const card = document.createElement('div');
+                card.className = 'bg-gray-800 rounded-2xl p-4 flex flex-col items-center shadow-lg';
+                
+                const colorsHtml = model.colors.map((color, index) => `
+                    <input type="radio" name="color-${model.name.replace(/\s+/g, '-')}" value="${color}" id="c-${model.name.replace(/\s+/g, '-')}-${index}" class="color-radio" style="background-color: ${color};" ${index === 0 ? 'checked' : ''}>
+                `).join('');
+                
+                const storageHtml = model.storage.map((size) => `<option value="${size}">${size}</option>`).join('');
+
+                card.innerHTML = `
+                    <img src="${model.img}" alt="[Photo of ${model.name}]" class="h-48 object-contain mb-4" onerror="this.onerror=null;this.src='https://placehold.co/400x400/1f2937/ffffff?text=Image+Not+Found';">
+                    <h3 class="text-xl font-semibold mb-2 text-center">${model.name}</h3>
+                    <div class="my-3">
+                        <p class="text-sm text-gray-400 mb-1">Color:</p>
+                        <div class="flex gap-2 justify-center">${colorsHtml}</div>
+                    </div>
+                    <div class="my-3 w-full">
+                         <p class="text-sm text-gray-400 mb-1">Storage:</p>
+                        <select class="bg-gray-700 border border-gray-600 rounded-lg w-full p-2">
+                            ${storageHtml}
+                        </select>
+                    </div>
+                    <button class="mt-4 w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-md px-5 py-2.5 text-center select-model">Select</button>
+                `;
+                modelGrid.appendChild(card);
+            });
+            showPage('page-model');
+        }
+        
+        function showConfirmation() {
+            showPage('page-confirmation');
+        }
+
+        // --- INITIALIZATION ---
+        populateBrands();
+        const swiper = new Swiper('.swiper-container', {
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+        });
+
+        // --- EVENT LISTENERS ---
+        brandWrapper.addEventListener('click', (e) => {
+            const slide = e.target.closest('.swiper-slide');
+            if (slide && slide.dataset.brand) {
+                populateModels(slide.dataset.brand);
+            }
+        });
+
+        document.getElementById('back-to-brand').addEventListener('click', () => showPage('page-brand'));
+        document.getElementById('back-to-model').addEventListener('click', () => showPage('page-model'));
+        
+        modelGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('select-model')) {
+                showPage('page-form');
+            }
+        });
+
+        orderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showConfirmation();
+        });
+        
+        document.getElementById('restart-button').addEventListener('click', () => {
+             showPage('page-brand');
+        });
+    });
+    </script>
+</body>
+</html>
+
